@@ -8,7 +8,7 @@
 #ifndef CONSTANT_H_
 #define CONSTANT_H_
 
-#define DUBUG				1 // debug flag, set to 0 for release
+#define DEBUG				1 // debug flag, set to 0 for release
 #define MAX_NUM_AGENTS		1000000  // max number of agents
 #define CUDA				0
 
