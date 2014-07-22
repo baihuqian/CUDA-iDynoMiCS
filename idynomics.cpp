@@ -9,7 +9,31 @@
 
 #include "simulator.h"
 #include "constant.h"
+#include "XMLParser/XMLParser.h"
 
+
+/**
+ * process input arguments and pass them to the parser
+ * input: XMLParser is passed by reference
+ */
+
+void processArguments(int argc, char **argv, XMLParser *parser)
+{
+	for(int i = 0; i < argc; i++)
+	{
+		// check validation of each argument
+
+		// pass filename to parser
+		bool res = parser->loadFile(*(argv + i));
+		if (res)
+			std::cout << *(argv + i) << " processed successfully" << std::endl;
+		else
+			std::cout << "Unable to open " << *(argv + i) << std::endl;
+		// parser read it
+
+		// store data
+	}
+}
 
 /**
  * main function of the simulator
@@ -18,7 +42,7 @@
 int main(int argc, char **argv)
 {
 	/* parse argument and pass it to XML parser */
-	XMLParser parser = new XMLParser(); // change to proper class name
+	XMLParser *parser = new XMLParser(); // change to proper class name
 	processArguments(argc, argv, parser);
 
 	if(DEBUG)
@@ -27,31 +51,14 @@ int main(int argc, char **argv)
 	}
 
 	/* initialize simulator */
-	Simulator simulator = new Simulator(parser);
+	Simulator *simulator = new Simulator(parser);
 
 	/* start simulator */
-	simulator.start();
+	simulator->start();
 
 	/* clean up if simulator is stopped */
 
 }
 
-/**
- * process input arguments and pass them to the parser
- * input: XMLParser is passed by reference
- */
 
-void processArguments(int argc, char **argv, XMLParser &parser)
-{
-	for(int i = 0; i < argc; i++)
-	{
-		// check validation of each argument
-
-		// pass filename to parser
-
-		// parser read it
-
-		// store data
-	}
-}
 

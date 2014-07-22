@@ -8,7 +8,9 @@
 #ifndef SIMULATOR_H_
 #define SIMULATOR_H_
 
+#include "XMLParser/XMLParser.h"
 #include "constant.h"
+#include <string>
 
 class Simulator {
 	/* private domain */
@@ -27,9 +29,11 @@ class Simulator {
 	bool *autocatalytic; // equivalent to Reaction.autocatalytic
 
 	// flags
-	bool m_initialized = false;
-	bool m_continueRunning = true; // set false to stop simulation
-	bool m_is3D = true; // true if the world is 3D, false if 2D
+	bool m_initialized;
+	bool m_continueRunning; // set false to stop simulation
+	bool m_is3D; // true if the world is 3D, false if 2D
+	bool isChemostat, isFluctEnv, multiEpi, invComp;
+	std::string attachmentMechanism;
 
 	// maximal physical environment size
 	float domainX, domainY, domainZ; // X, Y, Z dimension of domain in micrometer
@@ -37,7 +41,7 @@ class Simulator {
 	float domainResolution; // width of each side of the grid
 
 	// indices of boundaryLayer in Z direction
-	int *boundaryLayer;
+	float boundaryLayer; //TODO: check whether it's float or int, change initialization as well if necessary
 
 	// solute parameters in bulk
 	float *h_bulkSoluteList;
@@ -81,13 +85,16 @@ class Simulator {
 
 #endif
 	/*---------------------METHOD------------------------*/
-	Simulator();
-	~Simulator();
+
 
 
 
 
 protected:/* protected domain */
+	void createSimulator(XMLParser *parser);
+	void parseDomain(XMLParser *parser);
+	void parseSpecies(XMLParser *parser);
+	void parseSolutes(XMLParser *parser);
 #if CUDA == 0 // CPU implementation of device code
 	void agentStepDevice();
 	void shoveAll();
@@ -101,6 +108,8 @@ protected:/* protected domain */
 #endif
 	void step(); // step function
 	void checkAgentBirth();
+	void respondToConditions();
+	void updateActiveReactions();
 
 	void agentStep();
 	void afterShove();
@@ -108,7 +117,9 @@ protected:/* protected domain */
 	int gridIndex3D(int X, int Y, int Z); // 3D index to 1D index
 
 public:/* public domain */
-	Simulator(XMLParser parser); // populate data stored in XMLParser to host memory
+	Simulator();
+	~Simulator();
+	Simulator(XMLParser *parser); // populate data stored in XMLParser to host memory
 	void start(); // start simulation
 };
 
