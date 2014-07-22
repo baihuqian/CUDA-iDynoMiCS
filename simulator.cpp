@@ -124,7 +124,7 @@ void Simulator::parseSpecies(XMLParser *parser)
 
 
 	// read the parameters for each species from the protocol file
-	for (xml_node species : parser->_localRoot.children("species"))
+	for (xml_node species = parser->_localRoot.child("species"); species; species = species.next_sibling("species"))
 	{
 		int initNumAgents = 0; // number of initial agents for this specie
 		float divRadius, deathRadius;
@@ -136,7 +136,7 @@ void Simulator::parseSpecies(XMLParser *parser)
 		deathRadius = localRoot.getParamLength("deathRadius");
 
 		// store the name of the specie in the species dictionary
-		strcpy_s(speciesDic[numSpecies], strlen(species.attribute("name").value()), species.attribute("name").value());
+		strcpy(speciesDic[numSpecies], species.attribute("name").value());
 
 		// store the index of this specie in the species dictionary
 		h_species[numSpecies] = numSpecies;
@@ -179,31 +179,31 @@ void Simulator::parseSolutes(XMLParser *parser)
 	}
 
 	// extract solute parameters for solutes in the bulk region
-	for (xml_node param : bulkRoot._localRoot.children("solute"))
-	{
-		// store the name of the solute in the solute dictionary
-		strcpy_s(soluteDic[numSolutes], strlen(param.attribute("name").value()), param.attribute("name").value());
+	for (xml_node param = bulkRoot._localRoot.child("solute"); param; param = param.next_sibling("solute"))
+		{
+			// store the name of the solute in the solute dictionary
+			strcpy(soluteDic[numSolutes], param.attribute("name").value());
 
-		// store the index of the solute in the solute dictionary
-		bulkSoluteName[numBulkSolutes] = numSolutes;
+			// store the index of the solute in the solute dictionary
+			bulkSoluteName[numBulkSolutes] = numSolutes;
 
-		numSolutes++;
-		numBulkSolutes++;
-	}
+			numSolutes++;
+			numBulkSolutes++;
+		}
 
-	// allocate space for the solutes in the domain
-	soluteName = (int *) malloc(sizeof(int)*MAX_NUM_SOLUTES);
-	for (xml_node param : parser->_localRoot.child("solute"))
-	{
-		// store the name of the solute in the solute dictionary
-		strcpy_s(soluteDic[numSolutes], strlen(param.attribute("name").value()), param.attribute("name").value());
+		// allocate space for the solutes in the domain
+		soluteName = (int *) malloc(sizeof(int)*MAX_NUM_SOLUTES);
+		for (xml_node param = parser->_localRoot.child("solute"); param; param = param.next_sibling("solute"))
+		{
+			// store the name of the solute in the solute dictionary
+			strcpy(soluteDic[numSolutes], param.attribute("name").value());
 
-		// store the index of the solute in the solute dictionary
-		soluteName[numDomainSolutes] = numSolutes;
+			// store the index of the solute in the solute dictionary
+			soluteName[numDomainSolutes] = numSolutes;
 
-		numSolutes++;
-		numDomainSolutes++;
-	}
+			numSolutes++;
+			numDomainSolutes++;
+		}
 
 	// TODO: parse the solute concentrations
 }
@@ -283,6 +283,16 @@ void Simulator::agentStepDevice()
 	// TODO: implement checkDivisionAndDeath() and applyDivisionAndDeath();
 	checkDivisionAndDeath();
 	applyDivisionAndDeath();
+
+}
+
+void Simulator::respondToConditions()
+{
+
+}
+
+void Simulator::updateActiveReactions()
+{
 
 }
 
@@ -400,7 +410,15 @@ void Simulator::manageEPS()
 	}
 }
 
+void Simulator::checkDivisionAndDeath()
+{
 
+}
+
+void Simulator::applyDivisionAndDeath()
+{
+
+}
 /**
  * shoving algorithm
  */

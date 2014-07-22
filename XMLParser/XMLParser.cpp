@@ -7,6 +7,7 @@
 
 #include "pugixml.hpp"
 #include <iostream>
+#include <string.h>
 #include "XMLParser.h"
 #include "UnitConverter.h"
 
@@ -35,7 +36,7 @@ xml_node XMLParser::getParamByType(const char *paramType)
 
 bool XMLParser::getParamBool(const char* paramName) 
 {
-	for (xml_node param : _localRoot.children("param")) 
+	for (xml_node param = _localRoot.child("param"); param; param = param.next_sibling("param"))
 	{
 		if (strcmp(param.attribute("name").value(), paramName) == 0)
 		{
@@ -51,7 +52,7 @@ float XMLParser::getParamTime(const char* paramName)
 {
 	float out = 1.0;
 
-	for (xml_node param : _localRoot.children("param"))
+	for (xml_node param = _localRoot.child("param"); param; param = param.next_sibling("param"))
 	{
 		if (strcmp(param.attribute("name").value(), paramName) == 0)
 		{
@@ -68,7 +69,7 @@ float XMLParser::getParamLength(const char* paramName)
 {
 	float out = 1.0;
 
-	for (xml_node param : _localRoot.children("param"))
+	for (xml_node param = _localRoot.child("param"); param; param = param.next_sibling("param"))
 	{
 		if (strcmp(param.attribute("name").value(), paramName) == 0)
 		{
@@ -82,7 +83,7 @@ float XMLParser::getParamLength(const char* paramName)
 
 string XMLParser::getParam(const char* paramName)
 {
-	for (xml_node param : _localRoot.children("param"))
+	for (xml_node param = _localRoot.child("param"); param; param = param.next_sibling("param"))
 	{
 		if (strcmp(param.attribute("name").value(), paramName) == 0)
 		{

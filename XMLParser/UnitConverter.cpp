@@ -52,7 +52,7 @@ float UnitConverter::time(const char* timeUnit)
 /*
  *	Takes a length unit and returns a double value of length for that unit
  */
-float length(const char* lengthUnit)
+float UnitConverter::length(const char* lengthUnit)
 {
 	string _lengthUnit(lengthUnit);
 	string unit("");
@@ -125,7 +125,7 @@ float UnitConverter::mass(const char* massUnit)
 		out = (float) 1e9;
 		unit.assign("µg");
 	}
-	if (_massUnit.find("�g") != string::npos)
+	if (_massUnit.find("�g") != string::npos)
 	{
 		out = (float) 1e9;
 		unit.assign("µg");
@@ -167,7 +167,7 @@ float UnitConverter::volume(const char* volumeUnit)
 		out = 1.0;
 		unit.assign("µm");
 	}
-	if (_volumeUnit.find("�m") != string::npos)
+	if (_volumeUnit.find("�m") != string::npos)
 	{
 		out = 1.0;
 		unit.assign("µm");
